@@ -1,32 +1,68 @@
-import UserDetails from "../models/userDetails.js";
+import asyncHandler from "../middleware/asyncHandler.js";
+import Lead from "../models/Leads.js";
 
-// Create a new user
-const createUserDetails = async (req, res) => {
+// @desc Create loan leads
+// @route POST /api/leads
+// @access Public
+
+const createLead = asyncHandler(async (req, res) => {
+    const {
+        fName,
+        mName,
+        lName,
+        gender,
+        dob,
+        adhaar,
+        pan,
+        mobile,
+        alternateMobile,
+        personalEmail,
+        officeEmail,
+        loanAmount,
+        salary,
+        pinCode,
+        state,
+        city,
+    } = req.body;
+    const newLead = await Lead.create({
+        fName,
+        mName: mName ?? "",
+        lName: lName ?? "",
+        gender,
+        dob,
+        adhaar,
+        pan,
+        mobile,
+        alternateMobile,
+        personalEmail,
+        officeEmail,
+        loanAmount,
+        salary,
+        pinCode,
+        state,
+        city,
+    });
+    // const savedUserDetails = await newUserDetails.save();
+    res.status(201).json(newLead);
+});
+
+// @desc Get all leads
+// @route GET /api/leads
+// @access Private
+const getAllLeads = async (req, res) => {
     try {
-        const newUserDetails = new UserDetails(req.body);
-        const savedUserDetails = await newUserDetails.save();
-        res.status(201).json(savedUserDetails);
-    } catch (error) {
-        res.status(500).json({ message: "Error creating user details", error });
-    }
-};
+        // const page = parseInt(req.query.page) || 1; // current page
+        // const limit = parseInt(req.query.limit) || 10; // items per page
+        // const skip = (page - 1) * limit;
 
-// Get all user details
-// Get all user details with pagination
-const getAllUserDetails = async (req, res) => {
-    try {
-        const page = parseInt(req.query.page) || 1; // current page
-        const limit = parseInt(req.query.limit) || 10; // items per page
-        const skip = (page - 1) * limit;
-
-        const userDetails = await UserDetails.find().skip(skip).limit(limit);
-        const totalUsers = await UserDetails.countDocuments();
+        const leads = await Lead.find({}); //.skip(skip).limit(limit);
+        const totalLeads = await Lead.countDocuments();
 
         res.status(200).json({
-            totalUsers,
-            totalPages: Math.ceil(totalUsers / limit),
-            currentPage: page,
-            userDetails,
+            totalLeads,
+            // totalPages: Math.ceil(totalLeads / limit),
+            // currentPage: page,
+            leads,
         });
     } catch (error) {
         res.status(500).json({
@@ -75,5 +111,4 @@ const getAllUserDetails = async (req, res) => {
 //     }
 // };
 
-export { createUserDetails, getAllUserDetails };
-// getAllUserDetails, getUserDetailsById, updateUserDetailsById, deleteUserDetailsById };
+export { createLead, getAllLeads };
