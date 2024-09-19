@@ -1,4 +1,4 @@
-import UserDetails from '../Models/userDetails.js';
+import UserDetails from "../models/userDetails.js";
 
 // Create a new user
 const createUserDetails = async (req, res) => {
@@ -7,7 +7,7 @@ const createUserDetails = async (req, res) => {
         const savedUserDetails = await newUserDetails.save();
         res.status(201).json(savedUserDetails);
     } catch (error) {
-        res.status(500).json({ message: 'Error creating user details', error });
+        res.status(500).json({ message: "Error creating user details", error });
     }
 };
 
@@ -29,10 +29,12 @@ const getAllUserDetails = async (req, res) => {
             userDetails,
         });
     } catch (error) {
-        res.status(500).json({ message: 'Error retrieving user details', error });
+        res.status(500).json({
+            message: "Error retrieving user details",
+            error,
+        });
     }
 };
-
 
 // Get user details by ID
 // const getUserDetailsById = async (req, res) => {
@@ -73,5 +75,5 @@ const getAllUserDetails = async (req, res) => {
 //     }
 // };
 
-export { createUserDetails,getAllUserDetails };
+export { createUserDetails, getAllUserDetails };
 // getAllUserDetails, getUserDetailsById, updateUserDetailsById, deleteUserDetailsById };

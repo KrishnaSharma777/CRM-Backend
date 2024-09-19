@@ -1,10 +1,12 @@
 import express from "express";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import cors from "cors"; // Import cors
 import connectDB from "./config/db.js";
 import "dotenv/config.js";
 import morgan from "morgan";
 import userRoutes from "./routes/userroutes.js"; // Import routes
+import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 const PORT = process.env.PORT || 5000;
 connectDB();
@@ -23,12 +25,16 @@ app.use(
     })
 );
 
+app.use(cookieParser()); //cookie parser middlerware
 app.use(bodyParser.json()); // Middleware to parse JSON requests
 
 // Routes
 app.get("/", (req, res) => {
     res.send("API is running.......");
 });
+
+app.use(notFound);
+app.use(errorHandler);
 
 // app.use("/api/users", userRoutes); // Use the user routes
 
